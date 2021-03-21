@@ -53,11 +53,15 @@ ChatBot &ChatBot::operator=(const ChatBot &source)
     if (this == &source) return *this;
 
     _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+    _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     
     // check if image already exists on heap and delete
-    if (_image != nullptr)
+    if (_image != NULL)
+    {
         delete _image;
+    }
 
     // allocate image on heap from copy
     _image = new wxBitmap();
@@ -72,15 +76,21 @@ ChatBot::ChatBot(const ChatBot &source)
     std::cout << "ChatBot Copy Constructor" << std::endl;
 
     _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+
+    _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     
     // check if image already exists on heap and delete
     if (_image != nullptr)
+    {
         delete _image;
+    }
 
     // allocate image on heap from copy
     _image = new wxBitmap();
     *_image = *source._image;
+    _image = source._image;
 }
 
 // Move Constructor
@@ -89,19 +99,17 @@ ChatBot::ChatBot(ChatBot &&source)
     std::cout << "ChatBot Move Constructor" << std::endl;
 
     _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
     _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
     
-    // check if image already exists on heap and delete
-    if (_image != nullptr)
-        delete _image;
-
-    // allocate image on heap from copy
-    _image = new wxBitmap();
-    *_image = *source._image;
+    _image = source._image;
 
     source._chatLogic = nullptr;
     source._rootNode  = nullptr;
-    source._image = nullptr;
+    source._currentNode = nullptr;
+    source._image = NULL;
+
 }
 
 // Move assignment operator
@@ -112,19 +120,16 @@ ChatBot &ChatBot::operator=(ChatBot &&source)
     if (this == &source) return *this;
 
     _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+    _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     
-    // check if image already exists on heap and delete
-    if (_image != nullptr)
-        delete _image;
-
-    // allocate image on heap from copy
-    _image = new wxBitmap();
-    *_image = *source._image;
+    _image = source._image;
 
     source._chatLogic = nullptr;
+    source._currentNode = nullptr;
     source._rootNode  = nullptr;
-    source._image = nullptr;
+    source._image = NULL;
 
     return *this;
 }
